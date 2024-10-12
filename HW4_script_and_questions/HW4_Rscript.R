@@ -10,7 +10,7 @@ library(UsingR)
 library(readr)
 library(dplyr)
 
-df <- read.csv(file = "train.csv", header = T)
+df <- read.csv(file = "./HW4_Data/train.csv", header = T)
 head(df)
 
 # 1a: scatterplot between battery_power vs ram
