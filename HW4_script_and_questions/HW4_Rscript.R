@@ -126,16 +126,89 @@ max_pearson
 # 2f: scatter plot where y represents calories and x represents the nutrition fact with the largest pearson correlation coefficient to calories
 
 scatter_plot_w_trend <- ggplot(data = df,
-                               mapping = aes(x = df[, names(max_pearson)],
-                                     y = calories)) +
+                               mapping = aes(x = 
+                                df[, names(max_pearson)],
+                                y = calories)) +
   geom_point() +
   geom_smooth(method = "lm",
               formula = "y ~ x",
-              fill = NA)
+              fill = NA) + 
+  ggtitle(paste("Scatterplot of Calories vs ",
+          capitalize(names(max_pearson)))) +
+  theme(plot.title = element_text(hjust=0.5),
+    axis.title = element_text(colour = "BLUE",
+                                size = rel(1.5)),
+    axis.text = element_text(size = rel(1.2))) +
+  labs(x = capitalize(names(max_pearson)),
+      y = "Calories")
 
-scatter_plot_w_trend
+
+# 2g: Plot a density curve of Calories
+density_curve <- df %>% 
+  filter(mfr %in% c("General Mills", "Kellogs")) %>% 
+  ggplot(data = .,
+        mapping = aes(x = calories, color = mfr)) +
+  geom_density() +
+  ggtitle("Density Curve of Calories to compare Kellogs and General Mills") +
+  theme(plot.title = element_text(hjust = 0.5, size = rel(1.7)),
+        axis.title = element_text(size = rel(1.5))) +
+  labs(x = "Calories",
+      y = "Density")
+
+# 2h:
+
+# Filter and plot
+histogram_plot <- df %>%
+  filter(mfr %in% c("General Mills", "Kellogs")) %>%
+  ggplot(mapping = aes(x = calories, 
+    fill = mfr)) +
+  geom_histogram(binwidth = 10, 
+    position = "dodge", 
+    alpha = 0.7) + # Adjust binwidth as needed
+  ggtitle("Histogram of Calories to Compare Kellogs and General Mills") +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = rel(1.7)),
+    axis.title = element_text(size = rel(1.5))) +
+  labs(x = "Calories",
+    y = "Count")
 
 
+# 2i: Seven side-by-side Boxplots to compare each of the seven nutrition facts among the six mfr:
+head(as_tibble(df))
+long_df <- df %>% 
+  select(mfr, calories, protein, fat, sodium, fibre, carbo, sugars, potassium) %>% 
+  pivot_longer(
+    cols = c(protein, fat, sodium, fibre, carbo, sugars, potassium),
+names_to = "Seven_Nutri_Facts",
+values_to = "value")
+
+# Calculate the median values for ordering
+median_values <- long_df %>%
+  group_by(mfr) %>%
+  summarise(median_value = median(value)) %>%
+  arrange(median_value)
+
+# Reorder the mfr factor levels based on the median values
+long_df$mfr <- factor(long_df$mfr, levels = median_values$mfr)
+
+# Create the boxplot with the reordered mfr levels
+boxplot_nutrition <- ggplot(long_df, aes(x = mfr, y = value, color = mfr)) +
+  geom_boxplot() +
+  facet_wrap(~Seven_Nutri_Facts, scales = "free") +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = rel(1.7)),
+    axis.title = element_text(size = rel(1.5))
+  ) +
+  labs(
+    title = "Comparison of Seven Nutrition Facts Among Six MFR",
+    x = "Manufacturer",
+    y = "Value"
+  )
+
+print(boxplot_nutrition)
+
+
+# 2j : Stacked Bar plot to show the relationship between manufacturer and shelf placement:
 
 
 
