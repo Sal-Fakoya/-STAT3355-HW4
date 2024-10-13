@@ -5,7 +5,7 @@ date: "2024-10-13"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
+```{r all_libraries}
 # Importing Necessary Libraries:
 library(ggplot2)
 library(tidyr)
@@ -337,9 +337,9 @@ stacked_barplot <- df %>%
   ggplot(
     data = .,
     mapping = aes(
-      x = shelf,
-      color = "black", fill = mfr
-    )
+      x = shelf, 
+      fill = mfr),
+    color = "black"
   ) +
   geom_bar(position = "stack") +
   ggtitle("Staked Bar Plot of Shelf Placement") +
