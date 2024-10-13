@@ -23,7 +23,7 @@ base_plot <- df %>%
 scatter_plot <- base_plot +
   geom_point(mapping = aes( y = battery_power))
 
-scatter_plot
+
 
 # 1b:
 scatter_plot_w_trend <- scatter_plot +
@@ -155,9 +155,7 @@ density_curve <- df %>%
   labs(x = "Calories",
       y = "Density")
 
-# 2h:
-
-# Filter and plot
+# 2h: Plot Calories and Manufactures in a Histogram Plot to see the distribution of calories for General Mills and Kellogs:
 histogram_plot <- df %>%
   filter(mfr %in% c("General Mills", "Kellogs")) %>%
   ggplot(mapping = aes(x = calories, 
@@ -182,7 +180,7 @@ long_df <- df %>%
 names_to = "Seven_Nutri_Facts",
 values_to = "value")
 
-# Calculate the median values for ordering
+# To order the boxplots according to the median value,
 median_values <- long_df %>%
   group_by(mfr) %>%
   summarise(median_value = median(value)) %>%
@@ -192,7 +190,8 @@ median_values <- long_df %>%
 long_df$mfr <- factor(long_df$mfr, levels = median_values$mfr)
 
 # Create the boxplot with the reordered mfr levels
-boxplot_nutrition <- ggplot(long_df, aes(x = mfr, y = value, color = mfr)) +
+boxplot_nutrition <- ggplot(long_df, 
+            aes(x = mfr, y = value, color = mfr)) +
   geom_boxplot() +
   facet_wrap(~Seven_Nutri_Facts, scales = "free") +
   theme(
@@ -205,10 +204,15 @@ boxplot_nutrition <- ggplot(long_df, aes(x = mfr, y = value, color = mfr)) +
     y = "Value"
   )
 
-print(boxplot_nutrition)
-
-
 # 2j : Stacked Bar plot to show the relationship between manufacturer and shelf placement:
+stacked_barplot <- df %>% 
+  select(mfr, shelf) %>% 
+  ggplot(data = .,
+  mapping = aes(x = shelf,
+  color = "black", fill = mfr)) +
+  geom_bar(position = "stack") +
+  ggtitle("Staked Bar Plot of Shelf Placement") +
+  theme(plot.title = element_text(hjust = 0.5))
 
 
 
