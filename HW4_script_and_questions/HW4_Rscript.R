@@ -170,6 +170,23 @@ histogram_plot <- df %>%
   labs(x = "Calories",
     y = "Count")
 
+# Create a Box plot
+box_plot <- df %>%
+  filter(mfr %in% c("General Mills", "Kellogs")) %>%
+  ggplot(mapping = aes(x = mfr, y = calories, color = mfr)) +
+  geom_boxplot() +
+  ggtitle("Scatter Plot with Marginal Boxplots") +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = rel(1.2)),
+    axis.title = element_text(size = rel(1.2))
+  ) +
+  labs(x = "Manfacturer", y = "Calories")
+
+# Display the plot
+print(box_plot)
+
+
+
 
 # 2i: Seven side-by-side Boxplots to compare each of the seven nutrition facts among the six mfr:
 head(as_tibble(df))
@@ -203,6 +220,9 @@ boxplot_nutrition <- ggplot(long_df,
     x = "Manufacturer",
     y = "Value"
   )
+
+
+
 
 # 2j : Stacked Bar plot to show the relationship between manufacturer and shelf placement:
 stacked_barplot <- df %>% 

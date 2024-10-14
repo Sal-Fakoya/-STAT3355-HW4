@@ -261,7 +261,6 @@ density_curve <- df %>%
     x = "Calories",
     y = "Density"
   )
-
 density_curve
 ```
 
@@ -269,26 +268,44 @@ density_curve
 
 (h)
 ```{r Problem 2h}
-# 2h: Plot Calories and Manufactures in a Histogram Plot 
+# 2h: Plot Calories and Manufactures in a Histogram Plot
 # to see the distribution of calories for General Mills and Kellogs:
 histogram_plot <- df %>%
   filter(mfr %in% c("General Mills", "Kellogs")) %>%
   ggplot(mapping = aes(
     x = calories,
-    fill = mfr)) +
+    fill = mfr
+  )) +
   geom_histogram(
     binwidth = 10,
-    position = "dodge",
-    alpha = 0.7) + # Adjust binwidth as needed
+    position = "stack",
+    alpha = 0.7, color = "black"
+  ) + # Adjust binwidth as needed
   ggtitle("Histogram of Calories to Compare Kellogs and General Mills") +
   theme(
     plot.title = element_text(hjust = 0.5, size = rel(1.2)),
-    axis.title = element_text(size = rel(1.2))) +
+    axis.title = element_text(size = rel(1.2))
+  ) +
   labs(
     x = "Calories",
-    y = "Count")
+    y = "Count"
+  )
 
-histogram_plot
+# Create a Box plot
+box_plot <- df %>%
+  filter(mfr %in% c("General Mills", "Kellogs")) %>%
+  ggplot(mapping = aes(x = mfr, y = calories, color = mfr)) +
+  geom_boxplot() +
+  ggtitle("Scatter Plot with Marginal Boxplots") +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = rel(1.2)),
+    axis.title = element_text(size = rel(1.2))
+  ) +
+  labs(x = "Manfacturer", y = "Calories")
+
+# Display the plot
+print(box_plot)
+print(histogram_plot)
 ```
 
 
